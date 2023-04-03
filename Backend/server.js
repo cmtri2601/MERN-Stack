@@ -1,10 +1,20 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const path = require("path");
-const PORT = process.env.PORT || "8080";
+const PORT = process.env.PORT || "8000";
+const morgan = require("morgan");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const corsOptions = require("./config/corsOptions");
 //require("dotenv").config();
 
-app.use("/", express.static(path.join(__dirname, "/public")));
+app.use(cors(corsOptions));
+app.use(cookieParser);
+app.use(express.json());
+app.use(morgan("dev"));
+app.use("/", express.static(path.join(__dirname, "public"))); //Explicit way
+//app.use(express.static("public")); Also work (implicit way)
 
 app.use("/", require("./routes/root"));
 
@@ -20,5 +30,5 @@ app.all("*", (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
