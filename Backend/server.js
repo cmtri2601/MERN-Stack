@@ -7,8 +7,11 @@ const morgan = require("morgan");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const corsOptions = require("./config/corsOptions");
+const connectDB = require("./config/dbConn");
+const mongoose = require("mongoose");
 //require("dotenv").config();
 
+connectDB();
 app.use(cors(corsOptions));
 app.use(cookieParser);
 app.use(express.json());
@@ -29,6 +32,13 @@ app.all("*", (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log(err);
 });
