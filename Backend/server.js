@@ -5,15 +5,14 @@ const path = require("path");
 const PORT = process.env.PORT || "8000";
 const morgan = require("morgan");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+// const cookieParser = require("cookie-parser");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
-//require("dotenv").config();
 
 connectDB();
 app.use(cors(corsOptions));
-app.use(cookieParser);
+// app.use(cookieParser);
 app.use(express.json());
 app.use(morgan("dev"));
 app.use("/", express.static(path.join(__dirname, "public"))); //Explicit way
